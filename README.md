@@ -31,6 +31,27 @@ accident.
 You can still override the key for a single session from the sidebar
 ("Override key for this session") without touching the file.
 
+### Optional: protect a deployed app with an access code
+
+If you deploy this somewhere public, anyone with the link can use it and
+spend your API quota. To require a shared code before the app is usable,
+set `ACCESS_CODE` (in `.env` locally, or as a secret on your hosting
+platform). Leave it blank/unset to disable the gate.
+
+## Deploying for free (Streamlit Community Cloud)
+
+1. Push this repo to GitHub (`.env` stays out of it thanks to `.gitignore`).
+2. Go to [share.streamlit.io](https://share.streamlit.io), sign in with
+   GitHub, click **New app**, and select this repo, branch, and `app.py`.
+3. Before deploying, open **Advanced settings → Secrets** and paste:
+   ```toml
+   GEMINI_API_KEY = "your-actual-key-here"
+   ACCESS_CODE = "pick-a-code-if-you-want-the-gate"
+   ```
+   Root-level secrets here are automatically available as environment
+   variables, so no code changes are needed.
+4. Click **Deploy**. You'll get a `https://your-app.streamlit.app` URL.
+
 ## Run
 
 ```bash

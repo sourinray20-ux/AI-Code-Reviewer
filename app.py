@@ -147,6 +147,24 @@ st.markdown(
 if "history" not in st.session_state:
     st.session_state.history = []  # list of dicts: timestamp, language, code, review
 
+# ---- Optional access gate ----
+# Set an ACCESS_CODE secret (in .env locally, or in Streamlit Cloud's Secrets
+# box) to require a shared code before anyone can use the app and spend your
+# API quota. Leave ACCESS_CODE unset to disable this entirely.
+ACCESS_CODE = os.environ.get("ACCESS_CODE", "")
+
+if ACCESS_CODE and not st.session_state.get("authenticated", False):
+    st.title("🧑‍💻 AI Code Reviewer")
+    st.caption("This app is protected. Enter the access code to continue.")
+    entered = st.text_input("Access code", type="password")
+    if st.button("Enter"):
+        if entered == ACCESS_CODE:
+            st.session_state.authenticated = True
+            st.rerun()
+        else:
+            st.error("Incorrect code.")
+    st.stop()
+
 # ---- Sidebar ----
 with st.sidebar:
     st.header("⚙️ Settings")
